@@ -231,7 +231,7 @@ The following are the corrective terms derived from all of the tables the progra
 
 Also, note that a `-` is used before all comparisons. This can come across as somewhat redundant, even inefficient, if thinking about scalar code where false and true convert to `0` and `1` as you could simply remove the `-` from in from of the comparison and the `& 0x1` from the end and still get the same result. However, when it comes to comparisons in many SIMD instruction sets, the results of comparisons are different. Either each lane has all bits cleared or all bits set, i.e. `0`, or `-1`. The negative sign out in front is meant to reflect this. Note that this should not be conflated with other negative signs in the corrective terms. Those are there because negation is acaully part of the correction.
 
-Additionally, note that some corrective terms involve negating `x` or `y`. This can be problematic as if either is equal to the smallest representable value for a given integer type, as without converting to a larger type, attempting to negate the value will cause overflow. Therefore some additional handling for this edge case may be necessary. 
+Additionally, note that some corrective terms involve negating `x` or `y`. This can be problematic as if either is equal to the smallest representable value for a given integer type, and without converting to a larger type, attempting to negate the value will cause overflow. Therefore some additional handling for this edge case may be necessary. 
 
 #### Unsigned Corrective Terms
 * downwards-naive: `+(x & y & 0x1)`
