@@ -50,7 +50,7 @@ Rounding upwards can be useful in situations where underestimates are not desira
 
 Furthermore, we should note that there are easily more rounding schemes that you could be interested in using that haven't been brought up yet. In particular, for signed integers there's rounding towards zero, which is consistent with the rounding of the expression `(x + y) / 2` when `x` and `y` are signed integers. Beyond that there are still more possible rounding schemes such as rounding towards the nearest even/odd integer, and there's even stochastic rounding where the rounded value is chosen randomly. I will however not touch upon these last few rounding schemes any further.
 
-### std::midpoint
+## std::midpoint
 
 For both unsigned and signed integers, there is another notable rounding scheme, one that which is consistent with C++ 20's `std::midpoint`. This function could be described as an averaging function of sorts, but it's got a rounding scheme that's rather interesting. If the midpoint of the two inputs to this function cannot be exactly represented, the result rounds towards the first input. This makes this the first rounding scheme we've come across that exhibits asymmetric behavior with regards to its arguments. It's probably worth asking why someone would want this because symmetric behavior seems like it would be much more intuitively useful. Surely you don't want your results changing just because you did something as trivial as get the order of the arguments backwards, right? It sounds like a very subtle bug just waiting to happen. Well, consider the following scenario:  
 
@@ -258,7 +258,7 @@ Additionally, note that some corrective terms involve negating `x` or `y`. This 
 * away from zero-upwards: `-(-(x < -y) & (x ^ y) & 0x1)`
 * midpoint-naive: `+((-(y < x) & (x | y)) | (x & y) & 0x1)`
 * midpoint-downwards: `+(-(y < x) & (x ^ y) & 0x1)`
-* midpoint-upwards: `-(-(y < x) & (x ^ y) & 0x1)`
+* midpoint-upwards: `-(-(x < y) & (x ^ y) & 0x1)`
 * midpoint-away from zero: `(0 < x) ? -(abs(x) < abs(y)) : +(abs(x) < abs(y))`
 
 Now, to be clear, all of this work is strictly unnecessary. If you were so inclined, you could derive these corrective terms from first principles in a mathematically rigorous way. The main reason I did this was because this problem caught my attention late at night one day (I think it would have actually been morning at the time) meaning  I was too tired to think through all of these and it was much easier to write the table generating program, which has since been touched up to be more presentable.
