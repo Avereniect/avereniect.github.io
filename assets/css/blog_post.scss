@@ -1,6 +1,10 @@
 ---
 ---
 
+$heading_color: #e8e8e8;
+$heading_shadow_color : #f0f0f0;
+$heading_shadow_blur_radius : 0.5px;
+
 a:link {
     color: #E0E0E0;
     font-family: Tahoma, sans-serif;
@@ -48,19 +52,19 @@ div.main_div {
 
 
 h1 {
-    text-align: center;
+    text-align: left;
     text-indent: 0.5em;
     
-    color: #E0E0E0;
+    color: $heading_color;
     
     font-family: Tahoma, sans-serif;
     font-weight: normal;
-    font-size: 2em;
+    font-size: 1.9em;
 
     margin-top: 0.25em;
     margin-bottom: 0.25em;
 
-    background:#3d3d3d;
+    //background:#3d3d3d;
     border-radius: 6px;
 
     padding-top: 0.25em;
@@ -71,7 +75,8 @@ h2 {
     text-align: left;
     text-indent: 0px;
 
-    color: #E0E0E0;
+    color: $heading_color;
+    text-shadow: 0px 0px $heading_shadow_blur_radius $heading_shadow_color;
 
     font-family: Tahoma, sans-serif;
     font-weight: normal;
@@ -80,7 +85,7 @@ h2 {
     margin-top: 1.0em;
     margin-bottom: 0.5em;
 
-    background:#3d3d3d;
+    //background:#3d3d3d;
     border-radius: 6px;
 
     padding-top: 0.25em;
@@ -93,7 +98,9 @@ h3 {
     text-align: left;
     text-indent: 0em;
 
-    color: #E0E0E0;
+    color: $heading_color;
+    text-shadow: 0px 0px $heading_shadow_blur_radius $heading_shadow_color;
+
     font-family: Tahoma, sans-serif;
     font-size: 1em;
     font-weight: bold;
@@ -103,7 +110,9 @@ h4 {
     text-align: left;
     text-indent: 0em;
 
-    color: #E0E0E0;
+    color: $heading_color;
+    text-shadow: 0px 0px $heading_shadow_blur_radius $heading_shadow_color;
+
     font-family: Tahoma, sans-serif;
     font-size: 0.9em;
     font-weight: bold;
@@ -119,13 +128,13 @@ p {
 
     text-indent: 2em;
 
-    padding-top: 0.5em;
+    padding-top: 0.25em;
     padding-bottom: 0em;
     padding-left: 0.5em;
     padding-right: 0.5em;
 
-    margin-top: 0.325em;
-    margin-bottom: 0.325em;
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
 }
 
 p.date {
@@ -141,7 +150,7 @@ p.date {
     padding: auto;
     padding-right: 1em;
 
-    margin-top: auto;
+    margin-top: 0.5em;
     margin-bottom: auto;
 }
 
