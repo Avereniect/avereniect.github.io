@@ -137,6 +137,26 @@ p {
     margin-bottom: 0.25em;
 }
 
+p.super_title {
+    display: flex;
+    justify-content: space-between;
+
+    color: #E0E0E0;
+    font-family: Tahoma, sans-serif;
+    font-size : 0.85em;
+
+    line-height: 1.7em;
+
+    text-indent: 0em;
+    text-align: right;
+
+    padding: auto;
+    padding-right: 1em;
+
+    margin-top: 0.5em;
+    margin-bottom: auto;
+}
+
 p.date {
     color: #E0E0E0;
     font-family: Tahoma, sans-serif;

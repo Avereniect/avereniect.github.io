@@ -7,7 +7,10 @@
   </head>
   <body>
     <div class="main_div">
-      <p class="date">{{ page.date | date: "%Y %B %-d" }}</p>
+      <p class = "super_title">
+        <span> <a href="/blog.html">Blog Index</a> </span>
+        <span>{{ page.date | date: "%Y %B %-d" }}</span>
+      </p>
       <h1>{{ page.title }}</h1>
 {{ content }}
     </div>
