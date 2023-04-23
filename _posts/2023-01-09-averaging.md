@@ -250,8 +250,8 @@ trivial because it's just that same number.
 Secondly, if the two inputs don't have any set bits in common i.e. `(x & y ==
 0)`, then when adding the two numbers together, the carried values are always 0,
 meaning that overflow cannot happen. Under this assumption, it's safe to average
-the numbers by just adding them together and dividing by 2 (or right shifting by
-1) as would normally be done. Furthermore, the addition itself can be simplified
+the numbers by just adding them together and dividing by two, or right shifting by
+one as would normally be done. Furthermore, the addition itself can be simplified
 to either a bitwise OR, or a bitwise XOR. (To convince yourself of this, look at
 the truth table for bitwise addition, and ignore the row where A and B are both
 1.) So the formula for averaging under this assumption could be either `(x | y)
@@ -475,7 +475,7 @@ However, when it comes to comparisons in many SIMD instruction sets, the results
 of comparisons are different. Either each lane has all bits cleared or all bits
 set, i.e. `0`, or `-1`. The negative sign out in front is meant to reflect this.
 Note that this should not be conflated with other negative signs in the
-corrective terms. Those are there because negation is acaully part of the
+corrective terms. Those are there because negation is actually part of the
 correction.
 
 Additionally, note that some corrective terms involve negating `x` or `y`. This
