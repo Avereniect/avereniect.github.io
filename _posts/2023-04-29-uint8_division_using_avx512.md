@@ -278,10 +278,10 @@ from the results.
 Notably, all approaches delivered a substantial improvement over using the
 scalar div instruction, so none of them are terrible.
 
-However, the Granlund-Montgomery approach stands out as it performs nearly 20x
-better than scalar code. However, it does fundamentally rely on the lookup
-tables being in cache, something which may ruin its performance in practical
-applications where divisions don't have sufficient temporal locality.
+However, the Granlund-Montgomery approaches stand out as they performs nearly
+20x and 30x better than scalar code However, it does fundamentally rely on the
+lookup tables being in cache, something which may ruin its performance in
+practical applications where divisions don't have sufficient temporal locality.
 
 In contrast, the long division algorithm does not rely on reading from memory at
 all and its performance is still a large improvement over scalar code. It may
