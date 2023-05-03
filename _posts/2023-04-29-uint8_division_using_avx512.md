@@ -120,17 +120,52 @@ bits with `vpermi2b`, and combine those results with a `vpblendmb`.
 
 With a convenient way to compute both `m` and `l`, it's feasible to create a
 vectorized implementation of 8-bit integer division which relies upon the
-Granlund-Montgomery technique. With some luck and and some effort, this may also
-even end up being faster than alternative methods.
+Granlund-Montgomery technique.
+
+## Simplifying it Even Further
+Early, it was mentioned that the approach taken by the paper can be crudely
+described as emulating a float, however there is a simpler alternative,
+emulating a fixed-point number.
+[u/YumiYumiYumi](https://www.reddit.com/user/yumiYumiYumi/) suggested this
+simplification to me as well as example code of a refined implementation. The
+following section is an explanation of it.
+
+This approach removes the lead to compute `l`, and use the altogether, but it
+does fundamentally mean that more work must be done in computing `m` (which to
+be clear is now just the fixed-point reciprocal of `d` instead of the
+pseudo-mantissa which it previously was), and it must also be widened to be a
+16-bit value instead of an 8-bit value. This widening is necessary to ensure
+that the reciprocal has a sufficient amount of fractional bits to be able to
+accurately compute the quotient.
+
+Intuitively, a 16-bit value would seem to suggest that four uses of `vpermi2b`
+would be necessary, two for each of the low and high bytes of `m`, following the
+steps previously described. However this is not the case if you leverage a
+couple pieces of additional information. If the value of `d` is greater than
+128, then the high byte of `m` will always be `0000'0001`. 127 of the 255
+non-degenerate values of `d` meet this criteria, leaving 128 to handle via a
+lookup. A simple blend can be used to choose between the  `0000'0001` and the
+value produced by the lookup. The mask which is passed to this blend instruction
+may be produced by a `vpermi2b` if 1 is subtracted from the value of `d` first.
+In the reference code, this subtraction is performed upfront, affecting the
+layout of the data used in lookup table. The low bytes of the reciprocals can be
+computed using two `vpermi2b` instructions as was discussed in the prior
+section.
+
+A further consideration is that the value of sh1 will only ever be `0` or
+`false` when `d` equals 1, which is trivially handled by a blend at the end of
+the division subroutine. Additionally, since the `d` was decremented upfront,
+testing for whether `d` equal one can at this point be performed with just a
+`vptestnmb`.
 
 ## The Alternatives Methods
-Speaking of alternatives, it's worth discussing which specifically those are.
-There are at least four to which this approach could reasonably be compared. The
-first would be performing division in a scalar fashion that uses the native
-`div` instruction. The second would be a vectorized long division approach. A
-related third would a vectorized long division approach that also features early
-termination. And the last would to fall back to using the vectorized division
-instructions that *are* available, the ones for 32-bit floats.
+It's worth discussing which specifically the alternatives are. There are at
+least four to compare against. The first would be performing division in a
+scalar fashion that uses the native `div` instruction. The second would be a
+vectorized long division approach. A related third would a vectorized long
+division approach that also features early termination. And the last would to
+fall back to using the vectorized division instructions that *are* available,
+the ones for 32-bit floats.
 
 The long division algorithms would fundamentally take the same approach to
 division as children are taught in elementary, just in base 2. This means an
@@ -214,7 +249,7 @@ unrealistic benchmark where a list of dividends and divisors that fit into an
 L1D cache on my Ice Lake 1065G7 are processed repeatedly.
 
 The code for this benchmark and the implementations of the various approaches to
-division are available on [Compiler Explorer](https://godbolt.org/z/1q11c4hYo).
+division are available on [Compiler Explorer](https://godbolt.org/z/edfdKnKKf).
 
 In creating these implementations I've tried to ensure that they are reasonable,
 but it must be admitted that they are not necessarily as well optimized as they
@@ -233,11 +268,11 @@ The code was compiled using GCC 12.2.0 with the `-O3 -march=icelake-client`
 flags. The code was then run 50 times and the following statistics were computed
 from the results.
 
-|           | Scalar    | G-M Lookup | Long Div. | Early Ret. Div | fp-32 div. |
-|-----------|-----------|------------|-----------|----------------|------------|
-| Mean      | 420,919us | 22,448us   | 36,973us  | 50,572us       | 44,625us   |
-| Std. Dev. | 1,675us   | 174us      | 384us     | 305us          | 241us      |
-| Speed-up  | 1.00      | 18.75      | 11.38     | 8.32           | 9.43       |
+|           | Scalar    | G-M Lookup8 | G-M Lookup16 | Long Div. | Early Ret. Div | fp-32 div. |
+|-----------|-----------|-------------|--------------|-----------|----------------|------------|
+| Mean      | 421,273us | 22,464us    | 14,091us     | 36,862us  | 50,505us       | 44,497us   |
+| Std. Dev. | 1,407us   | 156us       | 163us        | 175us     | 273us          | 242us      |
+| Speed-up  | N/A       | 18.75       | 29.90        | 11.43     | 8.34           | 9.47       |
 {: .table.wide }
 
 Notably, all approaches delivered a substantial improvement over using the
@@ -270,15 +305,15 @@ always be 0, the following results were obtained:
 
 |           | Early Ret. Div |
 |-----------|----------------|
-| Mean      | 27us           |
-| Std. Dev. | 2us            |
-| Speed-up  | 16112.15       |
+| Mean      | 29us           |
+| Std. Dev. | 1.85us         |
+| Speed-up  | 15432.66       |
 {: .table.narrow }
 
 Here, the early-returning long division runs through the data at a substantially
-greater rate, which shouldn't be surprising given the fact that there is no work
-to be done. But this just isn't representative of what you'd expect to encounter
-in practice so perhaps this potential is best left ignored.
+greater rate, which shouldn't be surprising given the fact that there is no
+meaningful work to be done. But this just isn't representative of what you'd
+expect to encounter in practice so perhaps this potential is best left ignored.
 
 Overall, the lookup table accelerated version of the Granlund-Montgomery
 approach appears to be best if you're going to be performing a large amount of
@@ -286,5 +321,4 @@ approach appears to be best if you're going to be performing a large amount of
 divisions on an inconsistent basis. That said, in the grand scheme of things,
 the truth is that having to churn through any significant amount of unsigned
 8-bit integer divisions is not something most people ever have to do. I imagine
-that the number of people that would actually benefit from this approach is
-quite small.
+that the number of people that would actually benefit from this is quite small.
