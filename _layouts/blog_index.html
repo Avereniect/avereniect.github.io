@@ -3,11 +3,17 @@
   <head>
     <meta charset="UTF-8">
     <title>{{ page.title }}</title>
-    <link rel="stylesheet" href="./../assets/css/blog_post.css">
+    <link rel="stylesheet" href="/assets/css/blog_post.css">
   </head>
   <body>
     <div class="main_div">
-{{ content }}
+      <h1> Blog Posts</h1>
+        {% for post in site.posts %}
+        <div class="post_listing">
+            <a class="title" href="{{ post.url }}">{{ post.title }}</a>
+            <p class="post_desc"> {{ post.description }} </p>
+        </div>
+        {% endfor %}
     </div>
   </body>
 </html>

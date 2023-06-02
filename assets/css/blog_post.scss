@@ -6,13 +6,22 @@ $heading_shadow_color : #f0f0f0;
 $heading_shadow_blur_radius : 0.5px;
 
 a:link {
+    font-size: 1em;
     color: #E0E0E0;
     font-family: Tahoma, sans-serif;
+    font-weight: normal;
 }
 
 a:visited {
+    font-size: 1em;
     color: #A0A0A0;
     font-family: Tahoma, sans-serif;
+    font-weight: normal;
+}
+
+a:link.title {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
 }
 
 body {
@@ -79,10 +88,25 @@ body {
     }
 }
 
+div.post_listing {
+    background-color : #404040;
+    text-align: left;
+
+    padding-top: 9px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+
+    border-radius: 4px;
+
+    margin-top: 0.5em;
+    margin-bottom: 0em;
+}
+
 
 
 h1 {
-    text-align: left;
+    text-align: center;
     text-indent: 0.5em;
     
     color: $heading_color;
@@ -181,10 +205,16 @@ p.super_title {
     text-align: right;
 
     padding: auto;
-    padding-right: 1em;
+
+    margin-left: 0.5em;
+    margin-right: 0.5em;
 
     margin-top: 0.5em;
     margin-bottom: auto;
+}
+
+p.post_desc {
+    text-indent: 0em;
 }
 
 table {
@@ -212,6 +242,10 @@ table.narrow {
     width: 40%;
 }
 
+th.slant {
+    transform:
+        translate(315deg)
+}
 
 ul {
     color: #E0E0E0;

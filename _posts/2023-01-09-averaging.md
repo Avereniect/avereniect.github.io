@@ -1,6 +1,7 @@
 ---
 layout: blog_post
 title: Integer Averaging, Up to SIMD Midpoint
+description: A look at the problem of integer averaging, techniques for implementing averaging while following various rounding schemes, and potential techniques for creating SIMD vectorized implementations thereof.
 ---
 
 Any programmer will be familiar with the formula for the average of two numbers:  

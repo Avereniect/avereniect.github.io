@@ -1,6 +1,7 @@
 ---
 layout: blog_post
 title: Dividing 8-bit Uints with AVX-512VBMI
+description: Exploring how AVX-512VBMI can be used to perform Granlund-Montgomery division on 8-bit uints, and how a simpler more naive algorithm beats the hardware div instruction by up to ~30x .
 ---
 
 Torbjorn Granlund and Peter L. Montgomery are the authors behind a paper that is
@@ -279,7 +280,7 @@ Notably, all approaches delivered a substantial improvement over using the
 scalar div instruction, so none of them are terrible.
 
 However, the Granlund-Montgomery approaches stand out as they performs nearly
-20x and 30x better than scalar code However, it does fundamentally rely on the
+20x and 30x better than scalar code. However, they do fundamentally rely on the
 lookup tables being in cache, something which may ruin its performance in
 practical applications where divisions don't have sufficient temporal locality.
 
