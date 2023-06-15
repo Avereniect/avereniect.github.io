@@ -1,6 +1,8 @@
 ---
-layout: blog_index
+layout: site_index
 title: Index
 ---
 
-[Blog](./blog.html)
+[Blog Index](./blog.html)  
+  
+<!-- [The Blender Shader Node Editor TOC](./bn/toc.html) -->
