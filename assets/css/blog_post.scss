@@ -103,6 +103,16 @@ div.post_listing {
     margin-bottom: 0em;
 }
 
+div.row {
+    display: flex;
+}
+
+div.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
 
 
 h1 {
@@ -261,25 +271,34 @@ ul {
     width: 75%;
 }
 
+.centered_image_narrow {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+
 code {
     color: #E0E0E0;
-    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    font-family: Courier, Courier New, monospace;
     font-weight: normal;
 }
 
 .language-plaintext {
     color: #E0E0E0;
-    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    font-family: Courier, Courier New, monospace;
     font-weight: normal;
 }
 
 .language-code_block {
     color: #E0E0E0;
-    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    font-family: Courier, Courier New, monospace;
     font-weight: normal; 
+
     display: block;
     overflow: auto;
-
-
     width: auto;
 }
