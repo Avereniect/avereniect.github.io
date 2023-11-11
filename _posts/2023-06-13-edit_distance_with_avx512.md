@@ -341,10 +341,12 @@ relies on an assumption that all characters are represented with a constant
 amount of bytes.
 
 One possible solution to this problem would be to pre-process the string
-upfront. A map could be used to associate each unique character to some
-arbitrary integer value of a specified width and then the algorithm could run on
-an array which operates on these integer mappings instead of the characters'
-representations. 
+upfront. A map could be used to associate each unique character, codepoint, or
+grapheme, whichever is relevant, to some arbitrary integer value. This integer
+value would only have to be wide enough to encode as many unique values as there
+are keys within the aforementioned mapping. The algorithm could run then on an
+array which operates on an array of these mapped integers instead of the
+original data. 
 
 ### Overflow
 Perhaps a more straightforward issue, the algorithm breaks down when either
@@ -365,7 +367,7 @@ upon the performance improvements, as well as add complexity to the
 implementation.
 
 ### Register Only Implementation
-AVX-512 features 32 512-bit registers. Looking through the dissassembly on
+AVX-512 features 32 512-bit registers. Looking through the disassembly on
 Compiler Explorer, it's possible to see that the register zmm0-zmm5 are used,
 but that still leaves 26 registers free for other purposes. Collective, these
 registers could store 1664 bytes worth of information. 
